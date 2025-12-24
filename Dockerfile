@@ -21,5 +21,5 @@ COPY . .
 EXPOSE 8080
 
 # Run gunicorn
-CMD gunicorn main:app --bind 0.0.0.0:8080 --workers 2 --timeout 120
+CMD gunicorn main:app --bind 0.0.0.0:8080 --workers 2 --timeout 300
 
