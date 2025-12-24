@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: pdf-image-extractor
+    runtime: python
+    buildCommand: |
+      apt-get update
+      apt-get install -y mupdf mupdf-tools
+      pip install --upgrade pip
+      pip install -r requirements.txt
+    startCommand: gunicorn main:app --bind 0.0.0.0:$PORT
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
