@@ -1,1 +1,7 @@
 .env
+.venv/
+downloaded.pdf
+extracted_images/
+extracted_data.json
+__pycache__/
+.env
