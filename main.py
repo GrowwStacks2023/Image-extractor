@@ -119,6 +119,17 @@ def describe_image(image_url):
         logger.error(error_msg)
         raise Exception(error_msg)
 
+def extract_page_text(page):
+    """Extract text from a PDF page"""
+    try:
+        text = page.get_text("text")
+        # Clean up the text - remove excessive whitespace
+        text = "\n".join(line.strip() for line in text.split("\n") if line.strip())
+        return text if text else ""
+    except Exception as e:
+        logger.error(f"Error extracting text: {e}")
+        return ""
+
 def process_single_image(pdf, page_num, img_index, img):
     """Process a single image with complete error handling"""
     result = {
@@ -195,6 +206,11 @@ def process_pdf(pdf_data):
         page = pdf[page_num]
         page_images = []
         
+        # Extract text from page
+        page_text = extract_page_text(page)
+        logger.info(f"Page {page_num+1}/{total_pages}: Extracted {len(page_text)} characters of text")
+        
+        # Extract images from page
         image_list = page.get_images()
         logger.info(f"Page {page_num+1}/{total_pages}: Found {len(image_list)} images")
         
@@ -225,6 +241,7 @@ def process_pdf(pdf_data):
         
         results.append({
             "page": page_num + 1,
+            "text": page_text,
             "image_count": len(page_images),
             "images": page_images
         })
